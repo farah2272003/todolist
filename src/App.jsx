@@ -40,9 +40,11 @@ export default function App() {
     setError("");
   };
 
-  const handleToggle = (id) => {
-    const updatedTasks = tasks.map(task => {
-      if (task.id === id) {
+  function handleToggle(id) {
+  const updatedTasks = tasks.map(function(task) {
+    if (task.id === id) {
+      if (!task.done) {
+        // Success toast
         toast.success(
           <>
             <CheckCircle2 size={18} style={{ marginRight: 6, verticalAlign: "middle" }} />
@@ -50,12 +52,24 @@ export default function App() {
           </>,
           { autoClose: 2000 }
         );
-        return { ...task, done: !task.done };
+      } else {
+        // Failure toast (for example, when marking as incomplete)
+        toast.error(
+          <>
+            ❌ Task Marked Incomplete: {task.text}
+          </>,
+          { autoClose: 2000 }
+        );
       }
-      return task;
-    });
-    setTasks(updatedTasks);
-  };
+
+      return { ...task, done: !task.done };
+    }
+    return task;
+  });
+
+  setTasks(updatedTasks);
+}
+
 
   const handleDelete = (id) => {
     setTasks(tasks.filter(task => task.id !== id));
